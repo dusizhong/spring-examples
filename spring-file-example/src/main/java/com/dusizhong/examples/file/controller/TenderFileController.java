@@ -19,6 +19,7 @@ import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 
+//todo: 增加招标文件md5值，防止代理修改后，投标人下载，制作后投不一样
 @RestController
 @RequestMapping("/tenderFile")
 public class TenderFileController {

@@ -21,6 +21,7 @@
         <module>spring-websocket-example</module>
         <module>spring-cloud-example</module>
         <module>spring-cloud2-example</module>
+        <module>spring-pay-example</module>
     </modules>
 
 </project>
