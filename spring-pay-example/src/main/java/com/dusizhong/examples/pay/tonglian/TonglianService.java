@@ -29,12 +29,12 @@ import java.util.TreeMap;
 public class TonglianService implements ApplicationRunner {
 
     final String url = "https://open.allinpay.com/gateway";
-    final String appId = "1522844930580008962";
-    final String secretKey = "gIlaC6RrW6GH11Dk";
-    final String privateKeyPath = "/home/tonglian-cert/1522844930580008962(RSA2).pfx";
-    final String pwd = "5aa91168fcc37534f";
-    final String tlPublicKey = "/home/tonglian-cert/TLCert.cer";
-    final String accountSetNo = "401258"; //账户集编号（由通联分配）
+    final String appId = "xxx";
+    final String secretKey = "xxx";
+    final String privateKeyPath = "/home/tonglian-cert/xxx.pfx";
+    final String pwd = "xxx";
+    final String tlPublicKey = "/home/tonglian-cert/xxx.cer";
+    final String accountSetNo = "xxx"; //账户集编号（由通联分配）
 
     protected OpenClient client;
 

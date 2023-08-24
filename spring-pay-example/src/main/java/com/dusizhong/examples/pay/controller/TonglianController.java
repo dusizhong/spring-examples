@@ -59,9 +59,9 @@ public class TonglianController {
         post.setPayerCode("123");
         post.setPayerName("付款人");
         post.setPayerIp(IpUtils.getIpAddr(request));
-        post.setReceiverId("c723e6cf-bb22-466f-9918-9b0bb8f6caae");
-        post.setReceiverCode("911300006010731179");
-        post.setReceiverName("河北省成套招标有限公司");
+        post.setReceiverId("xxx");
+        post.setReceiverCode("xxx");
+        post.setReceiverName("xxx");
         post.setPayFee("0");
         post.setPayTime(SqlUtils.getDateTime());
         post.setFrontUrl("");
