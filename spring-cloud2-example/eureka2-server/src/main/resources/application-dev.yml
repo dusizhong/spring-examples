@@ -1,0 +1,28 @@
+server:
+  port: 9081
+
+spring:
+  application:
+    name: eureka-server
+  security:
+    user:
+      name: du
+      password: du2023
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss.SSS
+
+logging:
+  level.root: info
+  file: /logs/eureka2-server.log
+  file.max-size: 10MB
+  file.max-history: 730
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

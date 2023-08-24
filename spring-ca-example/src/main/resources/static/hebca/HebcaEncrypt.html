@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+	<head>
+		<meta charset="utf-8" />
+		<title>河北CA加密解密示例</title>
+		<script type="text/javascript" src="jquery.min.js"></script>
+		<script type="text/javascript" src="HebcaClient.js"></script>
+		<script type="text/javascript">
+
+			var client = new hebcaClient();
+			var b64File = 'data:text/plain;base64,DQrnjrDlrZjpl67popjvvJoNCuWfuuS6jkFjdGl2ZVjnmoRDQeeUteWtkOetvueroOaOp+S7tumcgOimgeWuieijheW5tumFjee9rueUqOaIt+S9k+mqjOW3rg==';
+			var b64Key;
+			setTimeout(showName, 500);
+
+			//获取单位名称
+			function showName() {
+				//选择签名证书
+				console.log('do showName');
+				client.SelectSignCert(function() {
+					client.GetSubjectItem(0, function(name) {
+						document.getElementById('caname').value = name;
+					});
+				});
+
+				client.GenerateFileKeyB64(function(keyB64) {
+					b64Key = keyB64;
+					console.log('GenerateFileKeyB64', b64Key);
+				});
+			}
+
+			//加密
+			function doEncrypt() {
+				console.log('do encrypt', b64Key);
+				client.EncryptFile(b64Key, 'd:/1.pdf', 'd:/1[加密].pdf', function(result){
+					alert('encrypted success!')
+				});
+			}
+
+			//解密
+			function doDecrypt() {
+				console.log('do encrypt', b64Key);
+					client.DecryptFile(b64Key, 'd:/1[加密].pdf', 'd:/1[解密].pdf', function(result){
+						alert('decrypted success！')
+					});
+			}
+		</script>
+	</head>
+
+	<body>
+		<form id="loginForm">
+			<div id="login" align="center">
+				请插入CA锁，在显示出单位名称后再进行操作。<br/>
+				单位名称：<input type="text" width="40px" length="400px" id="caname" readonly="true"><br/>
+				<input type="button" value="加密" onclick="doEncrypt()">
+				<input type="button" value="解密" onclick="doDecrypt()">
+			</div>
+		</form>
+	</body>
+</html>

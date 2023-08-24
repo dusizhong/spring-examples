@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>河北CA签章示例（IE浏览器）</title>
+</head>
+<body>
+<div style="line-height:10px">
+    <label for="localFilePath">本地文件</label>
+    <input type="text" id="localFilePath" value="d:\测试招标文件.pdf" />
+    <input type="button" value="打开本地文件" onclick="openLocalFile()"/>
+    <br/><br/>
+    <label for="netFileUrl">网络文件</label>
+    <input type="text" id="netFileUrl" value="http://124.239.222.114:9527/user/enterprise-res/16841389114001534144/测试招标文件.pdf"/>
+<!--    <input type="text" id="netFileUrl" value="http://124.239.222.114:9527/user/enterprise-res/16841389114001534144/多页.pdf"/>-->
+    <input type="button" value="[13]打开网络文件" onclick="openNetFile()" />
+    <input type="button" value="保存网络文件" onclick="saveNetFile()" />
+    <input type="button" value="保存文件" onclick="saveFile()" />
+    <br/><br/>
+</div>
+<div style="margin:20px 0">
+<object id="webPDFObj" classid="CLSID:6EE0E832-A96C-480C-AE0A-EB35A9BB9652" width="800" height="480">
+    <!-- 设置保存在本地的PDF文件名称，插入签章时在签章信息中会保存此文件名 -->
+    <param name="LocalFileName" value="测试招标文件（已签章）.pdf">
+</object>
+</div>
+</body>
+
+<script type="text/javascript" charset="UTF-8">
+// 统一报错
+function ShowExceptionError(e) {
+  if (e.name == "TypeError") {
+    alert("JS错误：" + e.message);
+  } else {
+    try {
+      alert("WebPDF错误：" + webPDFObj.GetErrMsg());
+    } catch (ee) {
+      alert("JS内部错误：" + ee.message);
+    }
+  }
+}
+
+// 打开本地文件
+function openLocalFile() {
+  try {
+    webPDFObj.OpenLocalFile(localFilePath.value);
+  } catch (e) {
+    ShowExceptionError(e);
+  }
+}
+
+// 关闭已打开的文件
+function closeFile() {
+  try {
+    webPDFObj.CloseFile();
+  } catch (e) {
+    ShowExceptionError(e);
+  }
+}
+
+// 打开网络文件
+function openNetFile() {
+  try {
+    webPDFObj.OpenNetFile(netFileUrl.value);
+  } catch (e) {
+    webPDFObj.ShowExceptionError(e);
+  }
+}
+
+// 保存网络文件
+function saveNetFile() {
+  try {
+    var res = webPDFObj.SaveNetFile('http://localhost:9008/saveNetFile');
+    alert('保存成功！' + res);
+  } catch (e) {
+    ShowExceptionError(e);
+  }
+}
+
+// 保存文件
+function saveFile() {
+  try {
+    webPDFObj.SaveLocalFile('d://test1.pdf');
+  } catch (e) {
+    ShowExceptionError(e);
+  }
+}
+</script>
+</html>

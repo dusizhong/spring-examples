@@ -1,0 +1,10 @@
+*.DS_Store
+Thumbs.db
+.gradle/
+build/
+target/
+bin/
+*.iml
+*.ipr
+*.iws
+*.idea

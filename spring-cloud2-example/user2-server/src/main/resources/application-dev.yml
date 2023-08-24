@@ -1,0 +1,60 @@
+server:
+  port: 9082
+
+spring:
+  application:
+    name: user-server
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring_examples_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password:
+    hikari:
+      maximum-pool-size: 12
+      connection-timeout: 60000
+      minimum-idle: 10
+      idle-timeout: 500000
+      max-lifetime: 540000
+      connection-test-query: SELECT 1
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+  servlet:
+    multipart:
+      maxFileSize: 2MB
+      maxRequestSize: 2MB
+  resources:
+    static-locations: file:/usr/local/spring-cloud2/user-res
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss.SSS
+
+logging:
+  level:
+    root: info
+    com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: WARN
+  file: /logs/user2-server.log
+  file.max-size: 10MB
+  file.max-history: 730
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://du:du2023@localhost:9081/eureka/
+
+file:
+  path: /usr/local/spring-cloud2/user-resource/
+  url: /user-resource/
+
+tencentcloud:
+  secret-id:
+  secret-key:
+  sms:
+    appid:
+    sign-name:

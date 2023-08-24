@@ -1,0 +1,48 @@
+server:
+  port: 9092
+
+spring:
+  application:
+    name: user-server
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring_example_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password:
+    testWhileIdle: true
+    validationQuery: SELECT 1
+  jpa:
+    properties:
+      hibernate:
+        naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+  servlet:
+    multipart:
+      maxFileSize: 2MB
+      maxRequestSize: 2MB
+  resources:
+    static-locations: file:/spring-cloud-example/user-res
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss.SSS
+
+resources:
+  static-url: http://localhost:9090/user
+
+logging:
+  level:
+    root: info
+    com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: WARN
+  file: /spring-cloud-example/user-log/user-server.log
+  file.max-size: 10MB
+  file.max-history: 730
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://du:du2023@localhost:9091/eureka

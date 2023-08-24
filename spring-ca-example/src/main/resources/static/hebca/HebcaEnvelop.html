@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+	<head>
+		<meta charset="utf-8" />
+		<title>河北CA数字信封示例</title>
+		<script type="text/javascript" src="../jquery.min.js"></script>
+		<script type="text/javascript" src="HebcaClient.js"></script>
+		<script type="text/javascript">
+
+			var baseUrl = 'http://localhost:9090';
+			var client = new hebcaClient();
+			setTimeout(doInit, 500);
+
+			//初始化选择加密证书
+			function doInit() {
+				client.SelectCryptCert(function() {
+					client.GetSubjectItem(0, function(name) { //无法显示，加密证书单位信息？
+						document.getElementById('caname').value = name;
+					})
+				})
+			}
+
+			//数字信封加密解密测试
+			function doEnvelopTest() {
+				var plainText = "d3d3LmJhaWR1LmNvbQ=="; //加密原文为base64格式(www.baidu.com)
+				client.GetCertB64(function(cert) {
+					console.log('获取加密证书', cert)
+					client.AddRecipient(cert, function() {
+						console.log('添加接收者证书完成！')
+						client.P7Envelop(plainText, function(envelopText) {
+							console.log('加密结果', envelopText)
+							client.P7UnEnvelop(envelopText, function(unEnvelopText) {
+								console.log('解密结果', unEnvelopText)
+							})
+						})
+					})
+				})
+			}
+
+			//从服务端获取数字信封密钥
+			var secretKey = "";
+			function getSecretKey() {
+				$.ajax({
+					url: baseUrl + '/hebca/getSecretKey',
+					type: 'GET',
+					success: function(res) {
+						console.log('获取密钥', res);
+						secretKey = res;
+					},
+					error: function(err) {
+						alert('获取密钥请求失败');
+					}
+				})
+			}
+
+			//前端解密数字信封密钥，回传服务端解密数据
+			function doUnEnvelop() {
+				client.P7UnEnvelop(secretKey, function(unEnvelopKey) {
+					console.log('解密数字信封密钥', unEnvelopKey);
+					$.ajax({
+						url: baseUrl + '/hebca/decryptFile',
+						type: 'POST',
+						data: { 'secretKey': unEnvelopKey },
+						success: function(res) {
+							alert(res);
+						},
+						error: function(err) {
+							alert('请求失败');
+						}
+					})
+				})
+			}
+		</script>
+	</head>
+
+	<body>
+		<form id="myForm">
+			<div align="center">
+				请插入CA锁，在显示出单位名称后点击测试按钮。<br/>
+				单位名称：<input type="text" width="40px" length="400px" id="caname" readonly="true"><br/>
+				<input type="button" value="数字信封加密解密测试" onclick="doEnvelopTest()">
+				<input type="button" value="获取数字信封密钥" onclick="getSecretKey()">
+				<input type="button" value="解密数字信封密钥" onclick="doUnEnvelop()">
+			</div>
+		</form>
+	</body>
+</html>

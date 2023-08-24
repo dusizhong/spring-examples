@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+	<head>
+		<meta charset="utf-8" />
+		<title>河北CA登录示例</title>
+		<script type="text/javascript" src="../jquery.min.js"></script>
+		<script type="text/javascript" src="HebcaClient.js"></script>
+		<script type="text/javascript">
+			var baseUrl = 'http://localhost:9008';
+			var client = new hebcaClient();
+
+			//获取随机数
+			var random = "tgyvukJgtQ";
+			$.ajax({
+				url: baseUrl + '/hebca/random',
+				type: 'GET',
+				success: function(result) {
+					random = result;
+					console.log('random', random);
+				},
+				error: function(err) {
+					alert('get random error');
+				}
+			});
+
+			//等待初始化，延迟0.5自动获取已插入key的单位名称（必须）
+			setTimeout(showName, 500);
+
+			//获取单位名称
+			function showName() {
+				//选择签名证书
+				client.SelectSignCert(function() {
+					client.GetSubjectItem(0, function(name) {
+						document.getElementById('caname').value = name;
+					})
+				})
+			}
+
+			//CA登录
+			function doLogin() {
+				client.Sign(random, function(signData) {
+					client.GetCertB64(function(cert) {
+						var params = { 'cert': cert, 'signData': signData }
+						$.ajax({
+							url: baseUrl + '/hebca/login',
+							type: 'POST',
+							data: params,
+							success: function(res) {
+								if(res == '登录成功') {
+									alert('登录成功');
+								} else {
+									alert(res);
+								}
+							},
+							error: function(err) {
+								alert('登录失败');
+							}
+						})
+					})
+				})
+			}
+		</script>
+	</head>
+
+	<body>
+		<form id="loginForm">
+			<div id="login" align="center">
+				请插入CA锁，在显示出单位名称后点击CA登录。<br/>
+				单位名称：<input type="text" width="40px" length="400px" id="caname" readonly="true"><br/>
+				<input type="button" value="CA登录" onclick="doLogin()">
+			</div>
+		</form>
+	</body>
+</html>

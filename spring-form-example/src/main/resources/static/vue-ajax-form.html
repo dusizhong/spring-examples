@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>vue-ajax动态表单示例</title>
+  <meta charset="utf-8">
+</head>
+<body>
+<div id="app">
+  <div>
+    新增表单项：<br>
+    <input v-model="formData.fieldName" placeholder="表单项">
+    <select v-model="formData.fieldType">
+      <option value="" disabled>请选择</option>
+      <option value="text">文本</option>
+      <option value="number">数字</option>
+    </select>
+    <button v-on:click="addData">添加</button>
+  </div>
+  <p>生成表单：</p>
+  <ul>
+    <li v-for="item in listData">
+      {{item.fieldName}}: <input v-model="item.fieldValue" :type="item.fieldType"/>
+    </li>
+  </ul>
+  <button @click="showData">查看数据</button>
+  <button @click="saveData">保存数据</button>
+</div>
+</body>
+
+<script src="js/vue.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      apiUrl: 'http://localhost:9004',
+      formData: { "formId": 1, "fieldType": "" },
+      listData: [],
+    },
+    created: function() {
+      console.log('page created');
+      this.requestData();
+    },
+    methods: {
+      requestData: function() {
+        let that = this;
+        $.ajax({
+          url: that.apiUrl + '/dynamicForm/field/list',
+          type: 'POST',
+          data: JSON.stringify({ 'formId': 1 }),
+          contentType: 'application/json;charset=UTF-8',
+          success: function(res) {
+            console.log('requestData', res.data);
+            that.listData = res.data;
+          },
+          error: function(err) {
+            alert(JSON.stringify(err.responseJSON.message));
+          }
+        })
+      },
+      addData: function() {
+        let that = this;
+        $.ajax({
+          url: that.apiUrl + '/dynamicForm/field/save',
+          type: 'POST',
+          data: JSON.stringify(that.formData),
+          contentType: 'application/json;charset=UTF-8',
+          success: function(res) {
+            console.log('addData', res);
+            if(res.code == 200) {
+              alert('添加成功');
+              that.requestData();
+            } else {
+              alert(res.msg);
+            }
+          },
+          error: function(err) {
+            alert(JSON.stringify(err.responseJSON.message));
+          }
+        })
+	    },
+      showData: function() {
+        alert(JSON.stringify(this.listData));
+      },
+      saveData: function() {
+        let that = this;
+        $.ajax({
+          url: that.apiUrl + '/dynamicForm/value/save',
+          type: 'POST',
+          data: JSON.stringify(that.listData),
+          contentType: 'application/json;charset=UTF-8',
+          success: function(res) {
+            console.log('saveData', res);
+            if(res.code == 200) {
+              alert('保存成功');
+            } else {
+              alert(res.msg);
+            }
+          },
+          error: function(err) {
+            alert(JSON.stringify(err.responseJSON.message));
+          }
+        })
+	    },
+    }
+  })
+</script>

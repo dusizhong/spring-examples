@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="cn" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <title>河北CA签章示例(Chrome)</title>
+  <script type="text/javascript" src="jquery-3.6.0.js"></script>
+  <script type="text/javascript" src="hebcaWebPDF.js"></script>
+</head>
+<body>
+<div style="line-height:10px">
+<label for="localFilePath">本地文件</label>
+<input type="text" id="localFilePath" value="d:\测试招标文件.pdf" />
+<input type="button" value="打开本地文件" onclick="openLocalFile()"/>
+<br/><br/>
+
+<label for="netFileUrl">网络文件</label>
+<input type="text" id="netFileUrl" value="http://124.239.222.114:9527/user/enterprise-res/16841389114001534144/测试招标文件.pdf"/>
+<input type="button" value="[13]打开网络文件" onclick="openNetFile()" />
+<input type="button" value="[23]打开网络文件2（阅读器已打开时调用）" onclick="OpenNetFile2Example();" disabled="disabled" />
+<input type="button" value="保存网络文件" onclick="saveNetFile()" />
+<input type="button" value="保存文件" onclick="saveFile()" />
+<br/><br/>
+<input type="button" value="[19]打开阅读器" onclick="OpenExample();" />
+<input type="button" value="[20]关闭阅读器" onclick="Close1Example();" />
+<input type="button" value="[21]打开本地文件（阅读器已打开时调用）" onclick="OpenLocalFile2Example();" />
+
+<input type="button" value="关闭文件" onclick="closeFile()"/>
+<input type="button" value="关闭文件（阅读器不关闭）" onclick="CloseFile2Example();" />
+</div>
+</body>
+
+<script type="text/javascript" charset="UTF-8">
+// 统一报错
+function ShowExceptionError(e) {
+  if (e.name == "TypeError") {
+    alert("JS错误：" + e.message);
+  } else {
+    try {
+      alert("WebPDF错误：" + GetErrMsg());
+    } catch (ee) {
+      alert("JS内部错误：" + ee.message);
+    }
+  }
+}
+
+// 打开本地文件
+function openLocalFile() {
+  try {
+    OpenLocalFile(localFilePath.value);
+  } catch (e) {
+    ShowExceptionError(e);
+  }
+}
+
+// 关闭已打开的文件
+function closeFile() {
+  try {
+    CloseFile();
+  } catch (e) {
+    ShowExceptionError(e);
+  }
+}
+
+// 打开网络文件
+function openNetFile() {
+  try {
+    OpenNetFile(netFileUrl.value);
+  } catch (e) {
+    ShowExceptionError(e);
+  }
+}
+
+// 保存网络文件回调
+// boolean success: true表示操作执行成功
+// string msg: 操作执行失败时的错误信息
+// string resp: 服务器响应信息
+function saveNetFileCallback(success, msg, resp) {
+  //在此处添加处理代码...
+  if (success) {
+    alert("保存成功");
+  } else {
+    alert("Error:\n" + msg);
+    console.log('保存网络文件失败：', resp);
+    return;
+  }
+}
+
+// 保存网络文件
+function saveNetFile() {
+  try {
+    SaveNetFile('http://localhost:9008/saveNetFile?fileName=test', saveNetFileCallback);
+  } catch (e) {
+    ShowExceptionError(e);
+  }
+}
+
+// 保存文件
+function saveFile() {
+  try {
+    SaveFile('http://localhost:9008/saveNetFile');
+  } catch (e) {
+    ShowExceptionError(e);
+  }
+}
+
+
+
+// 获取文档中签章数量
+function getSealCount() {
+  try {
+    var count = webPDFObj.GetSealCount();
+	  alert("签章数量：" + count);
+  } catch (e) {
+    ShowExceptionError(e);
+  }
+}
+</script>
+</html>

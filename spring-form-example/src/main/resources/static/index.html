@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Java表单示例</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+  <script>
+
+function showError(resp) {
+    resp.json().then(function (result) {
+        console.log('Error: ' + result.message);
+    });
+}
+
+$(function () {
+    var vm = new Vue({
+        el: '#vm',
+        http: {
+            timeout: 5000
+        },
+        data: {
+            title: 'TODO List',
+            todos: [],
+            loading: false
+        },
+        created: function () {
+            this.init();
+        },
+        methods: {
+            init: function () {
+                var that = this;
+                that.loading = true;
+                that.$resource('/api/todos').get().then(function (resp) {
+                    that.loading = false;
+                    resp.json().then(function (result) {
+                        that.todos = result.todos;
+                    });
+                }, function (resp) {
+                    that.loading = false;
+                    showError(resp);
+                });
+            },
+            create: function (todo) {
+                var that = this;
+                that.$resource('/api/todos').save(todo).then(function (resp) {
+                    resp.json().then(function (result) {
+                        that.todos.push(result);
+                    });
+                }, showError);
+            },
+            update: function (todo, prop, e) {
+                var that = this;
+                var t = {
+                    name: todo.name,
+                    description: todo.description
+                };
+                t[prop] = e.target.innerText;
+                if (t[prop] === todo[prop]) {
+                    return;
+                }
+                that.$resource('/api/todos/' + todo.id).update(t).then(function (resp) {
+                    resp.json().then(function (r) {
+                        todo.name = r.name;
+                        todo.description = r.description;
+                    });
+                }, function (resp) {
+                    e.target.innerText = todo[prop];
+                    showError(resp);
+                });
+            },
+            remove: function (todo) {
+                var that = this;
+                that.$resource('/api/todos/' + todo.id).delete().then(function (resp) {
+                    var i, index = -1;
+                    for (i=0; i<that.todos.length; i++) {
+                        if (that.todos[i].id === todo.id) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index >= 0) {
+                        that.todos.splice(index, 1);
+                    }
+                }, showError);
+            }
+        }
+    });
+    window.vm = vm;
+
+    var vmAdd = new Vue({
+        el: '#vmAdd',
+        data: {
+            name: '',
+            description: ''
+        },
+        methods: {
+            submit: function () {
+                vm.create(this.$data);
+                this.name = '';
+                this.description = '';
+            }
+        }
+    });
+});
+
+    </script>
+</head>
+
+<body>
+  <header class="navbar navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a href="/" class="navbar-brand">JAVA表单示例</a>
+      </div>
+      <nav class="collapse navbar-collapse" id="bs-navbar">
+        <ul class="nav navbar-nav">
+          <li><a target="_blank" href="vue-form.html">Vue</a></li>
+          <li><a target="_blank" href="jq-form.html">Jquery</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <div id="important" style="color:#cdbfe3; background-color:#6f5499; padding:30px 0; margin:-20px 0 20px 0;">
+    <div class="container">
+      <h1 style="color:#fff; font-size:20px">Java动态表单示例</h1>
+      <p style="font-size:14px; line-height:36px">Java动态表单示例展示了如何使用Vue、Axios或Jquery、Ajax实现从服务器端获取表单项数据，渲染成表单展示。</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-th-list"></span> 动态表单</h3>
+          </div>
+          <div class="panel-body">
+            <div id="vm">
+              <h3>{{ title }}</h3>
+                <p v-if="loading">Loading...</p>
+                  <ol>
+                    <li v-for="t in todos">
+                      <dl>
+                         <dt contenteditable="true" v-on:blur="update(t, 'name', $event)">{{ t.name }}</dt>
+                                        <dd contenteditable="true" v-on:blur="update(t, 'description', $event)">{{ t.description }}</dd>
+                                        <dd><a href="#0" v-on:click="remove(t)">Delete</a></dd>
+                                    </dl>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span> 新增表单项</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form id="vmAdd" action="#0" v-on:submit.prevent="submit">
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <input type="text" v-model="name" class="form-control" placeholder="Enter name">
+                            </div>
+                            <div class="form-group">
+                                <label>Description:</label>
+                                <input type="text" v-model="description" class="form-control" placeholder="Enter description">
+                            </div>
+                            <button type="submit" class="btn btn-default">新增</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>更多使用案例</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Vue</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>更多动态表单示例请访问github...</p>
+                        <p><a target="_blank" href="#">更多</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Jquery</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>更多动态表单示例请访问github...</p>
+                        <p><a target="_blank" href="#">更多</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Github</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>更多动态表单示例请访问github...</p>
+                        <p><a target="_blank" href="#">更多</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background-color:#ddd; padding: 20px 0; text-align: center">
+        <div class="container">
+            <p>
+                <a target="_blank" href="#">站点首页</a> -
+                <a target="_blank" href="https://github.com">GitHub</a> -
+                <a target="_blank" href="#">Weibo</a>
+            </p>
+            <p>Copyright @ 2023</p>
+        </div>
+    </footer>
+
+    <script src="js/vue.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script>
+  new Vue({
+    el: '#app',
+    data: {
+      apiUrl: 'http://localhost:9020',
+      data: [{"id": 1, "name":"", "money":""}],
+      i: 1
+    },
+    created:function() {
+      console.log('page created');
+      this.requestData();
+    },
+    methods:{
+      add:function() {
+        this.i++;
+        let newData = {};
+        newData.id = this.i;
+        this.data.push(newData);
+      },
+      submit:function() {
+        alert(JSON.stringify(this.data));
+      },
+      requestData: function() {
+        let params = { 'formId': 1, 'page': 0, 'size': 10 };
+        axios.post(this.apiUrl + '/dynamicForm/field/list', params).then(function(res) {
+          console.log(res.data);
+        })
+      },
+      addData() {
+        alert('addData');
+      }
+    }
+  })
+</script>
+</body>
+</html>

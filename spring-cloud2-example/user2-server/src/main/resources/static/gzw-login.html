@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Gzw Sso Login</title>
+<body>
+<h1>Gzw Sso Login...</h1>
+</body>
+<script src="http://cdn.bootcss.com/jquery/1.12.4/jquery.min.js" type="text/JavaScript"></script>
+<script>
+var code = getQueryString('code');
+if(!code) {
+  window.location.href = "http://188.2.131.14:80/o/oauth2/authorize?response_type=code&client_id=id-983cdf-45b7-da14-6275-b72a2c0a624";
+} else {
+  gzwLogin(code);
+}
+
+function getQueryString(name) {
+var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+var r = window.location.search.substr(1).match(reg);
+if (r != null) {
+return unescape(r[2]);
+}
+return null;
+}
+
+function gzwLogin(code) {
+				var requestParams = {
+					'grant_type': 'gzw',
+					'code': code
+				}
+				$.ajax({
+					url: 'http://124.239.222.114:9030/user/oauth/token',
+					type: 'POST',
+					headers: { 'Authorization': 'Basic ' + window.btoa('tenderee_min:123') },
+					data: requestParams,
+					success: function(result) {
+						var access_token = result.access_token;
+						window.location.href = 'http://124.239.222.114:19028/projectManagement.html?token=' + access_token;
+					},
+					error: function(error) {
+						console.log(JSON.stringify(error.responseJSON));
+						alert('Error: ' + error.responseJSON.error);			
+					}
+				});
+			}
+</script>
+</html>

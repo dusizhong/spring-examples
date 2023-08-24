@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Jquery动态表单示例</title>
+</head>
+<body>
+<div>
+  <form>
+    新增表单项：<br>
+    <input id="formData.fieldName" placeholder="表单项">
+    <select id="formData.fieldType">
+      <option value="" disabled>请选择</option>
+      <option value="text">文本</option>
+      <option value="number">数字</option>
+    </select>
+    <button onclick="addData()">添加</button>
+  </form>
+  <p>生成表单：</p>
+  <ul id="list">
+    <li>报价项: <input id="price" type="number" placeholder="请填写"/></li>
+  </ul>
+  <button onclick="showData()">查看JSON</button>
+</div>
+</body>
+
+<script src="js/vue.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script>
+  var apiUrl = "http://localhost:9004";
+  var formData = {};
+  var formValue = {};
+  requestData();
+
+  function requestData() {
+    $.ajax({
+      url: apiUrl + '/dynamicForm/field/list',
+      type: 'POST',
+      data: JSON.stringify({ 'formId': 1 }),
+      contentType: 'application/json;charset=UTF-8',
+      success: function(res) {
+        console.log('requestData', res.data);
+        var fieldList = res.data;
+        for(i=0; i<fieldList.length; i++) {
+          $("#list").children("li").last().append("<li>" + fieldList[i].fieldName
+           + ": <input type="+fieldList[i].fieldType + "></li>");
+        }
+      },
+      error: function(err) {
+        alert(JSON.stringify(err.responseJSON.message));
+      }
+    })
+  }
+
+  function addData() {
+    $.ajax({
+      url: apiUrl + '/dynamicForm/field/save',
+      type: 'POST',
+      data: JSON.stringify(formData),
+      contentType: 'application/json;charset=UTF-8',
+      success: function(res) {
+        console.log('addData', res);
+        if(res.code == 200) {
+          alert('添加成功');
+        } else {
+          alert(res.msg);
+        }
+      },
+      error: function(err) {
+        alert(JSON.stringify(err.responseJSON.message));
+      }
+    })
+	}
+
+  function showData() {
+    alert(JSON.stringify(formValue));
+  }
+</script>
