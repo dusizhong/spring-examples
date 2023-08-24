@@ -28,7 +28,9 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
+/**
+ * 通联云商通支付
+ */
 @Slf4j
 @RestController
 @RequestMapping("/tonglian")
@@ -65,7 +67,7 @@ public class TonglianController {
         post.setPayFee("0");
         post.setPayTime(SqlUtils.getDateTime());
         post.setFrontUrl("");
-        post.setBackUrl("http://192.168.1.101/PayOrder/notify");
+        post.setBackUrl("http://192.168.1.101/tonglian/notify");
         post.setStatus(OrderStatusEnum.PENDING.getCode());
         //发起支付
         post.setChannelName("TONGLIAN");

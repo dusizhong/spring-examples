@@ -6,6 +6,8 @@ spring示例代码，源于真实项目。
    * install:install-file -Dfile=D:\lib\test.jar -DgroupId=com.test -DartifactId=test -Dversion=1.0 -Dpackaging=Jar
 2. 运行jar包
    * nohup java -jar test.jar &
+3. 上传jar
+   * scp -r xxx.jar root@61.188.25.211:/usr/local/
 
 ### 目录
 9001. spring-boot-example
@@ -17,7 +19,7 @@ spring示例代码，源于真实项目。
 9004. spring-form-example
    * jquery、vue、Ajax、axios（axios不支持IE）实现的动态表单示例。
 9005. spring-file-example
-   * word、excel、xml、pdf、ofd等各类文件操作、大文件分片上传、引入本地jar包示例。
+   * word、excel、xml、pdf、ofd等各类文件操作、大文件分片上传、文件添加水印、引入本地jar包示例。
 9006. spring-http-example
    * restTemplate、httpClient、HttpUrlConnection、ssl示例。
 9007. spring-encrypt-example
