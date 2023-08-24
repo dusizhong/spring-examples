@@ -15,9 +15,9 @@ public class TonglianUtils {
     //统一支付中心地址
     public static String BASE_URL = "http://124.239.222.112:9010/PayCenterServer/allinpay";
     //app secret
-    private static String appsecret = "eykbKrVudVANSpqiOhZK9w==";
+    private static String appsecret = "";
     //allinpay code
-    private static String allinpaycode = "wlgs2022";
+    private static String allinpaycode = "";
 
     /**
      * 生成公共请求参数
