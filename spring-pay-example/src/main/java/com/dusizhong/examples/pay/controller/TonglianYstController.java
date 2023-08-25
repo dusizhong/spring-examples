@@ -7,14 +7,10 @@ import com.dusizhong.examples.pay.enums.OrderStatusEnum;
 import com.dusizhong.examples.pay.enums.PayTypeEnum;
 import com.dusizhong.examples.pay.model.BaseResp;
 import com.dusizhong.examples.pay.repository.PayOrderRepository;
-import com.dusizhong.examples.pay.tonglian.TonglianService;
+import com.dusizhong.examples.pay.tonglian.yst.TonglianService;
 import com.dusizhong.examples.pay.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -33,8 +29,8 @@ import java.time.format.DateTimeFormatter;
  */
 @Slf4j
 @RestController
-@RequestMapping("/tonglian")
-public class TonglianController {
+@RequestMapping("/tonglian/yst")
+public class TonglianYstController {
 
     @Autowired
     private TonglianService tonglianService;

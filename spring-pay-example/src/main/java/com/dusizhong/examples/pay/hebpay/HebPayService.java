@@ -1,6 +1,6 @@
 package com.dusizhong.examples.pay.hebpay;
 
-import com.dusizhong.examples.pay.util.XmlUtils;
+import com.dusizhong.examples.pay.wxpay.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

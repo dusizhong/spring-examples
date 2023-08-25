@@ -1,4 +1,4 @@
-package com.dusizhong.examples.pay.util;
+package com.dusizhong.examples.pay.wxpay;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +36,7 @@ public class XmlUtils {
      * @throws Exception
      */
     public static Map<String, String> xmlToMap(String strXML) throws Exception {
+        System.out.println(strXML);
         try {
             Map<String, String> data = new HashMap<String, String>();
             DocumentBuilder documentBuilder = newDocumentBuilder();
@@ -60,7 +61,6 @@ public class XmlUtils {
             logger.error("Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(), strXML);
             throw ex;
         }
-
     }
 
     /**
@@ -116,5 +116,14 @@ public class XmlUtils {
 
     private static Document newDocument() throws ParserConfigurationException {
         return newDocumentBuilder().newDocument();
+    }
+
+    public static void main(String[] args) {
+        String xml = "<xml><appid><![CDATA[wx6ddab8ac4732e38f]]></appid><bank_type><![CDATA[CFT]]></bank_type><cash_fee><![CDATA[1]]></cash_fee><fee_type><![CDATA[CNY]]></fee_type><is_subscribe><![CDATA[N]]></is_subscribe><mch_id><![CDATA[1536281661]]></mch_id><nonce_str><![CDATA[4r612zzi8oMS2XDzTn4MIxSruh1aaJLX]]></nonce_str><openid><![CDATA[oMN2t1Qw7vgHfSR1GiIxmPdsMQ4Y]]></openid><out_trade_no><![CDATA[8563320190619104216709]]></out_trade_no><result_code><![CDATA[SUCCESS]]></result_code><return_code><![CDATA[SUCCESS]]></return_code><sign><![CDATA[E25249BE3DDE58F70D51C1A2882893BD]]></sign><time_end><![CDATA[20190619184853]]></time_end><total_fee>1</total_fee><trade_type><![CDATA[NATIVE]]></trade_type><transaction_id><![CDATA[4200000316201906199546850810]]></transaction_id></xml>";
+        try {
+            System.out.println(xmlToMap(xml));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

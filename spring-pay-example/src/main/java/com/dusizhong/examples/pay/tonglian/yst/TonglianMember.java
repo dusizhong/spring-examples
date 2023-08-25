@@ -1,4 +1,4 @@
-package com.dusizhong.examples.pay.tonglian;
+package com.dusizhong.examples.pay.tonglian.yst;
 
 import lombok.Data;
 

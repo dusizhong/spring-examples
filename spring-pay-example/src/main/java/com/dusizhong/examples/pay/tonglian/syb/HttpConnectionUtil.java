@@ -1,4 +1,4 @@
-package com.dusizhong.examples.pay.util;
+package com.dusizhong.examples.pay.tonglian.syb;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;

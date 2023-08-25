@@ -1,4 +1,4 @@
-package com.dusizhong.examples.pay.tonglian;
+package com.dusizhong.examples.pay.tonglian.yst;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -24,6 +24,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * 通联云商通网关支付
+ */
 @Slf4j
 @Service
 public class TonglianService implements ApplicationRunner {

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import static com.dusizhong.examples.pay.util.XmlUtils.xmlToMap;
+import static com.dusizhong.examples.pay.wxpay.XmlUtils.xmlToMap;
 
 /**
  * 河北银行聚合支付工具

@@ -1,108 +1,70 @@
-package com.dusizhong.examples.pay.tonglian;
+package com.dusizhong.examples.pay.tonglian.syb;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dusizhong.examples.pay.util.HttpConnectionUtil;
-import com.dusizhong.examples.pay.util.SybUtil;
+import com.dusizhong.examples.pay.tonglian.yst.TonglianService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * 通联老收银宝支付通道
+ * 通联收银宝支付通道
+ * 通联支付接口文档 https://aipboss.allinpay.com/know/devhelp/index.php?pid=3
+ *
+ * 通联支付接口说明：
+ *
+ * 产品名称：通联收银宝
+ * 开发文档：https://aipboss.allinpay.com/know/devhelp/index.php?pid=3
+ *
+ * 一、扫码支付
+ * 1. 微信支付
+ * NATIVE支付：调用微信
+ * JSAPI支付：
+ * 刷卡支付：
+ *
+ * 支付宝支付
+ *
+ * 二、网关支付
+ * 1、B2C网关：即个人网银支付
+ * 2、B2B网关：即企业网银支付
+ *
+ * 三、快捷支付
+ * 一次绑定后在商户实现便捷支付，无需持卡人开通网上银行
  */
 @Service
-public class TonglianOldService {
+public class TonglianSybService {
 
     private final static Logger logger = LoggerFactory.getLogger(TonglianService.class);
 
-    //支付网关
-    public static String HOSTNAME;
-
-    @Value("${tonglian.hostname}")
-    public void setHOSTNAME(String hostname) {
-        this.HOSTNAME = hostname;
-    }
-
-    //二维码支付
-    public static String QR_CODE;
-
-    @Value("${tonglian.qr_code}")
-    public void setQR_CODE(String qr_code) {
-        this.QR_CODE = qr_code;
-    }
-
-    //支付结果通知地址
-    public static String NOTIFY_URL;
-
-    @Value("${tonglian.notify_url}")
-    public void setNotifyUrl(String notifyUrl) {
-        this.NOTIFY_URL = notifyUrl;
-    }
-
-    //通联退款网关
-    public static String REFUND;
-
-    @Value("${tonglian.refund}")
-    public void setREFUND(String refund) {
-        this.REFUND = refund;
-    }
-
-    @Value("${tonglian.qr_code.refund}")
-    String QR_REFUND;
-
     //商户号
-    public static String CUSID;
-
-    @Value("${tonglian.cusid}")
-    public void setCUSID(String cusid) {
-        this.CUSID = cusid;
-    }
-
+    public static String CUSID = "xxx";
     //应用ID
-    public static String APPID;
-
-    @Value("${tonglian.appid}")
-    public void setAPPID(String appid) {
-        this.APPID = appid;
-    }
-
-    public static String APPKEY;
-
-    @Value("${tonglian.appkey}")
-    public void setAPPKEY(String appkey) {
-        this.APPKEY = appkey;
-    }
-
-    public static String VALID_TIME;
-
-    @Value("${tonglian.valid_time}")
-    public void setValidTime(String validTime) {
-        this.VALID_TIME = validTime;
-    }
-
-    @Value("${tonglian.ret_url_weixin}")
-    String ret_url_weixin;
+    public static String APPID = "xxx";
+    //应用KEY
+    public static String APPKEY = "xxx";
+    //收银宝网关支付（B2B、B2C）
+    public static String SYB_GATEWAY = "https://vsp.allinpay.com/apiweb/gateway";
+    //收银宝统一支付（微信、支付宝扫码支付）
+    public static String SYB_UNITORDER = "https://vsp.allinpay.com/apiweb/unitorder";
+    //支付结果通知地址
+    public static String NOTIFY_URL = "http://192.168.1.110/tonglian/syb/notify";
+    //微信支付成功前台跳转页面
+    public static String ret_url_weixin = "http://192.168.1.110/tonglian/syb/success.html";
 
     /**
      * 网关支付
-     *
+     * 返回网银跳转地址
      * @param outTradeNo
      * @param centTotalFee
      * @param random
-     * @param bidSectionName
      * @return
      */
-    public Map<String, String> tonglianpay(String outTradeNo, String centTotalFee, String random, String bidSectionName, String paytype) {
+    public Map<String, String> tonglianpay(String outTradeNo, String centTotalFee, String random, String paytype) {
         TreeMap<String, String> reqData = new TreeMap<String, String>();
         reqData.put("cusid", CUSID);
         reqData.put("appid", APPID);
@@ -110,7 +72,7 @@ public class TonglianOldService {
         reqData.put("notifyurl", NOTIFY_URL);
         reqData.put("trxamt", centTotalFee);
         reqData.put("orderid", outTradeNo);
-        reqData.put("goodsinf", "投标保函服务费");
+        reqData.put("goodsinf", "测试服务费");
         reqData.put("randomstr", random);
         reqData.put("paytype", paytype);//B2C,B2B
         reqData.put("sign", sign(reqData, APPKEY));
@@ -128,7 +90,7 @@ public class TonglianOldService {
      */
     public String qr_codepay(String centTotalFee, String outTradeNo, String random, String body) {
         String url = "";
-        HttpConnectionUtil http = new HttpConnectionUtil(QR_CODE);
+        HttpConnectionUtil http = new HttpConnectionUtil(SYB_UNITORDER + "/pay");
         try {
             http.init();
             TreeMap<String, String> params = new TreeMap<String, String>();
@@ -198,7 +160,7 @@ public class TonglianOldService {
     @Transactional
     public String refund(String outTradeNo, String centTotalFee, String random) {
         String code = "fail";
-        HttpConnectionUtil http = new HttpConnectionUtil(REFUND);
+        HttpConnectionUtil http = new HttpConnectionUtil(SYB_GATEWAY + "/refund");
         try {
             http.init();
             TreeMap<String, String> params = new TreeMap<String, String>();
@@ -215,22 +177,6 @@ public class TonglianOldService {
             Map<String, String> map = handleResult(result);
             if (map.get("retcode").equals("SUCCESS")) {
                 if (map.get("trxstatus").equals("0000")) {
-                    //获取交易记录
-//                    TransRecord transRecord = transRecordRepo.findByOutTradeNo(map.get("orderid"));
-//                    Guarantee guarantee = guaranteeRepo.findBySerialNo(map.get("orderid"));
-//                    //更新交易记录
-//                    transRecord.setStatus("REFUND");
-//                    transRecord.setNotifyTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-//                    transRecordRepo.save(transRecord);
-//                    //更新保函记录
-//                    guarantee.setStatus("REJECT");
-//                    guarantee.setRefundTransactionId(map.get("trxid"));
-//                    guarantee.setRefund(true);
-//                    guarantee.setReApply(true);
-//                    guarantee.setPaid("已退款");
-//                    guarantee.setStatusName("已退回");
-//                    guarantee.setRefundTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-//                    guaranteeRepo.save(guarantee);
                     logger.info("通联退款成功" + map.get("orderid"));
                     code = "success";
                 } else logger.info("通联退款交易状态码不正确" + map.get("orderid"));
@@ -242,7 +188,7 @@ public class TonglianOldService {
     }
 
     /**
-     * 支付宝二维码退款
+     * 支付宝退款
      *
      * @param centTotalFee
      * @param outTradeNo
@@ -251,7 +197,7 @@ public class TonglianOldService {
      */
     public String qrcodeRefund(String centTotalFee, String outTradeNo, String random) {
         String code = "fail";
-        HttpConnectionUtil http = new HttpConnectionUtil(QR_REFUND);
+        HttpConnectionUtil http = new HttpConnectionUtil(SYB_UNITORDER + "/refund");
         try {
             http.init();
             TreeMap<String, String> params = new TreeMap<String, String>();
@@ -268,22 +214,6 @@ public class TonglianOldService {
             Map<String, String> map = handleResult(result);
             if (map.get("retcode").equals("SUCCESS")) {
                 if (map.get("trxstatus").equals("0000")) {
-                    //获取交易记录
-//                    TransRecord transRecord = transRecordRepo.findByOutTradeNo(map.get("reqsn"));
-//                    Guarantee guarantee = guaranteeRepo.findBySerialNo(map.get("reqsn"));
-//                    //更新交易记录
-//                    transRecord.setStatus("REFUND");
-//                    transRecord.setNotifyTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-//                    transRecordRepo.save(transRecord);
-//                    //更新保函记录
-//                    guarantee.setStatus("REJECT");
-//                    guarantee.setRefundTransactionId(map.get("trxid"));
-//                    guarantee.setRefund(true);
-//                    guarantee.setReApply(true);
-//                    guarantee.setPaid("已退款");
-//                    guarantee.setStatusName("已退回");
-//                    guarantee.setRefundTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-//                    guaranteeRepo.save(guarantee);
                     logger.info("支付宝二维码退款成功" + map.get("reqsn"));
                     code = "success";
                 } else logger.info("支付宝二维码退款交易状态码不正确" + map.get("reqsn"));
@@ -295,7 +225,7 @@ public class TonglianOldService {
     }
 
     /**
-     * 通联微信退款
+     * 微信退款
      *
      * @param centTotalFee
      * @param outTradeNo
@@ -304,7 +234,7 @@ public class TonglianOldService {
      */
     public String weixinrefund(String centTotalFee, String outTradeNo, String random) {
         String code = "fail";
-        HttpConnectionUtil http = new HttpConnectionUtil(QR_REFUND);
+        HttpConnectionUtil http = new HttpConnectionUtil(SYB_UNITORDER + "/refund");
         try {
             http.init();
             TreeMap<String, String> params = new TreeMap<String, String>();
@@ -322,22 +252,6 @@ public class TonglianOldService {
             Map<String, String> map = handleResult(result);
             if (map.get("retcode").equals("SUCCESS")) {
                 if (map.get("trxstatus").equals("0000")) {
-                    //获取交易记录
-//                    TransRecord transRecord = transRecordRepo.findByOutTradeNo(map.get("reqsn"));
-//                    Guarantee guarantee = guaranteeRepo.findBySerialNo(map.get("reqsn"));
-//                    //更新交易记录
-//                    transRecord.setStatus("REFUND");
-//                    transRecord.setNotifyTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-//                    transRecordRepo.save(transRecord);
-//                    //更新保函记录
-//                    guarantee.setStatus("REJECT");
-//                    guarantee.setRefundTransactionId(map.get("trxid"));
-//                    guarantee.setRefund(true);
-//                    guarantee.setReApply(true);
-//                    guarantee.setPaid("已退款");
-//                    guarantee.setStatusName("已退回");
-//                    guarantee.setRefundTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-//                    guaranteeRepo.save(guarantee);
                     logger.info("微信退款成功" + map.get("reqsn"));
                     code = "success";
                 } else logger.info("微信退款交易状态码不正确" + map.get("reqsn"));
@@ -347,6 +261,7 @@ public class TonglianOldService {
         }
         return code;
     }
+
 
     public static String sign(TreeMap<String, String> params, String key) {
         params.put("key", key);
@@ -432,5 +347,4 @@ public class TonglianOldService {
             throw new Exception(map.get("retmsg").toString());
         }
     }
-
 }

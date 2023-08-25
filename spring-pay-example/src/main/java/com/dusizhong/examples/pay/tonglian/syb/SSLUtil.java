@@ -1,4 +1,4 @@
-package com.dusizhong.examples.pay.util;
+package com.dusizhong.examples.pay.tonglian.syb;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
