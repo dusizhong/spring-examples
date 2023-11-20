@@ -22,6 +22,7 @@
         <module>spring-cloud-example</module>
         <module>spring-cloud2-example</module>
         <module>spring-pay-example</module>
+        <module>spring-office-example</module>
     </modules>
 
 </project>

@@ -1,0 +1,509 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>电子签章WEB调用实例</title>
+<script type="text/javascript">
+function TestOpen() {
+   
+    try {
+					        // 打开本地文件
+					        // 参数1：本地文件路径
+   webPDFObj.OpenLocalFile(localSrc.value);
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+    }
+}
+
+
+function TestLoadFile() {
+   
+    try {
+					        // 打开本地文件
+					        // 参数1：本地文件路径
+   webPDFObj.LoadFile(localSrc1.value);
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg()+"***"+e.message);
+    }
+}
+
+function TestOpenNet() {
+try {
+					        // 打开网络文件
+					        // 参数1：网络文件URL
+        webPDFObj.OpenNetFile(netSrc.value);
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+    }
+}
+function TestSave() {
+    try {
+					        // 保存本地文件
+					        // 参数1：本地文件路径
+        webPDFObj.SaveLocalFile(localDst.value);
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+    }
+}
+function TestSaveNet() {
+    try {
+					        // 保存网络文件
+					        // 参数1：处理文件数据流的URL地址
+					        // 返回：服务器响应
+        console.log('start sav to web');
+        console.log(netDst.value)
+        var res = webPDFObj.SaveNetFile(netDst.value);
+          console.log(res)
+					alert(res);
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+}
+}
+function TestCloseFile() {
+    try {
+					        // 关闭打开的PDF文件
+        webPDFObj.CloseFile();
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+}
+}
+function TestGetPageCount() {
+            try {
+                // 获取文档总页数
+                // 返回：文档文档总页数
+                var count = webPDFObj.GetPageCount();
+                alert("文档总页数：" + count);
+            }
+            catch (e) {
+                alert("错误：" + webPDFObj.GetErrMsg());
+            }
+        }
+		function TestGetSeal() {
+    try {
+					        // 获取文档中签章数量
+					        // 返回：文档中签章的数量
+   var count = webPDFObj.GetSealCount();
+					        alert("签章数量：" + count);
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+    }
+}
+function TestInsertSeal() {
+    try {
+					        // 静默签章插入
+					        // 参数1：签章所在页码，从1开始
+					        // 参数2，参数3：页面内坐标，左上角为(0,0)
+					        // 参数4：签章序列号
+					        // 参数5：设备密码
+        // 参数 6：eUnitType：坐标单位类型，0=像素（默认）、1=百分比
+webPDFObj.InsertSeal(pageNO.value, 500, 500, "13926937635954744", "123456");
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+    }
+}
+function TestInsertSeal1() {
+    try {
+					        // 静默签章插入
+					        // 参数1：签章所在页码，从1开始
+					        // 参数2，参数3：页面内坐标，左上角为(0,0)
+        // 参数 4：eUnitType：坐标单位类型，0=像素（默认）、1=百分比
+			webPDFObj.InsertSeal2(pageNO.value, 500, 500);
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+    }
+}
+function TestVerifyAllSeal() {
+    try {
+					        // 批量验证签章
+        var b = webPDFObj.VerifyAllSeal();
+					alert(b);
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+    }
+}
+function TestGetSealPack(src, b) {
+    try {
+         //获取签章数量整体
+        var n = webPDFObj.GetSealCount_Pack(src, b);
+        alert("签章数量：" + n);
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+    }
+}
+function TestVerifyAllSealPack() {
+    try {
+        // 批量验证签章整体
+        var b = webPDFObj.VerifyAllSeal_Pack(textfield.value, true);
+        alert(b);
+    }
+    catch (e) {
+    alert("错误：" + webPDFObj.GetErrMsg());
+    }
+}
+function TestInsertSealPack() {
+     try {
+ // 参数1：文档
+ // 参数2：是否本地文件
+// 参数3：签章所在页码，从1开始
+ //参数4、5：页面内坐标，左上角为(0,0)
+// 参数 6：eUnitType：坐标单位类型，0=像素（默认）、1=百分比
+         webPDFObj.InsertSeal_Pack(textfield2.value, true, pageNO1.value,100,100);
+       }
+       catch (e) {
+           alert("错误：" + webPDFObj.GetErrMsg());
+       }
+ }
+ function SelectStampAndLogin_Seal() {
+ 
+      try {
+             webPDFObj.Open();
+             webPDFObj.SelectStampAndLogin();
+         // 参数1：文档
+         // 参数2：是否本地文件
+// 参数3：签章所在页码，从1开始
+         //参数4、5：页面内坐标，左上角为(0,0)，用于竖版文档
+//参数6、7：页面内坐标，左上角为(0,0)，用于横版文档，可选
+// 参数 8：eUnitType：坐标单位类型，0=像素（默认）、1=百分比
+              webPDFObj.InsertSeal_Pack2(textfield2.value, true, pageNO1, 500, 500);
+              webPDFObj.Close();
+            }
+             catch (e) {
+                alert("错误：" + webPDFObj.GetErrMsg());
+         }
+}
+function TestInsertPageSealPack() {
+            try {
+                webPDFObj.Open();
+                // 静默所有页签章插入整体接口
+                // 参数1：本地文件路径
+                // 参数2，参数3：页面内坐标，左上角为(0,0)
+//参数4：坐标值单位类型（可选）：0=像素（默认）；1=百分比
+                webPDFObj.InsertPageSeal_Pack(textfield2.value, 100, 100);
+                webPDFObj.Close();
+            }
+            catch (e) {
+                alert("错误：" + webPDFObj.GetErrMsg());
+            }
+        }
+function TestSealLock() {
+   try {
+       //锁定或解锁签章：lock=true锁定；lock=false解锁；
+        webPDFObj.LockSeal(true);
+      }
+      catch (e) {
+               alert("错误：" + webPDFObj.GetErrMsg());
+              }
+}
+function TestSealLock1() {
+   try {
+       //锁定或解锁签章：lock=true锁定；lock=false解锁；
+        webPDFObj.LockSeal(false);
+      }
+      catch (e) {
+               alert("错误：" + webPDFObj.GetErrMsg());
+              }
+}
+function TestDisableSealFunc() {
+   try {
+       //显示或隐藏工具栏签章相关功能：disable =true隐藏；disable =false显示；
+        webPDFObj. DisableSealFunc (true);
+      }
+      catch (e) {
+               alert("错误：" + webPDFObj.GetErrMsg());
+              }
+}
+function TestDisableSealFunc1() {
+   try {
+       //显示或隐藏工具栏签章相关功能：disable =true隐藏；disable =false显示；
+        webPDFObj. DisableSealFunc (false);
+      }
+      catch (e) {
+               alert("错误：" + webPDFObj.GetErrMsg());
+              }
+}
+function TestShowToolbar() {
+    try {
+           // 显示或隐藏工具栏：show=true显示；show=false隐藏；
+           webPDFObj.ShowToolbar(false);
+         }
+         catch (e) {
+            alert("错误：" + webPDFObj.GetErrMsg());
+         }
+}
+function TestShowToolbar1() {
+    try {
+           // 显示或隐藏工具栏：show=true显示；show=false隐藏；
+           webPDFObj.ShowToolbar(true);
+         }
+         catch (e) {
+            alert("错误：" + webPDFObj.GetErrMsg());
+         }
+}
+function TestGetSealPic() {
+    try {
+          // 获取签章图片
+          // 参数1：签章索引，索引从1开始
+          // 返回签章图片Base64串
+          var imgB64 = webPDFObj.GetSealPicB64(sealIndex.value);
+          document.getElementById("divPic").innerHTML = "<img src='data:image/png;base64," + imgB64 + "' />";
+       }
+       catch (e) {
+           alert("错误：" + webPDFObj.GetErrMsg());
+       }
+}
+function GetVer() {
+	try {
+		var ver = webPDFObj.GetVersion();
+        alert(ver);
+	}
+catch (e) {
+		alert("错误：" + webPDFObj.GetErrMsg());
+	}
+}
+//打开阅读器
+// 调用接口Open()，发生错误时抛出异常
+function OpenReader() {
+	try {
+		webPDFObj.Open();
+	}
+catch (e) {
+		alert("错误：" + webPDFObj.GetErrMsg());
+	}
+}
+//关闭阅读器
+// 调用接口Close()，发生错误时抛出异常
+function CloseReader() {
+	try {
+		webPDFObj.Close();
+	}
+catch (e) {
+		alert("错误：" + webPDFObj.GetErrMsg());
+	}
+}
+function TestResizeWin() {
+     try {
+          webPDFObj. ResizeWin(Widtd.value, Height.value);
+        }
+        catch (e) {
+          alert("错误：" + webPDFObj.GetErrMsg());
+        }
+}
+function TestPrint() {
+     try {
+          // 打印
+webPDFObj.Print();
+           }
+           catch (e) {
+              alert("错误：" + webPDFObj.GetErrMsg());
+        }
+}
+function SelectStampAndLogin_Seal() {
+      try {
+             webPDFObj.Open();
+    // 参数1：文档
+         // 参数2：二维码值
+// 参数3：签章所在页码，从1开始
+         //参数4、5：页面内坐标，左上角为(0,0)，用于竖版文档
+//参数6、7：页面内坐标，左上角为(0,0)，用于横版文档，可选
+//参数8：二维码尺寸（mm），默认为25mm
+webPDFObj.InsertQRCode_Pack(src.value,"test string",pageNO2.value, 100,100,25);
+              webPDFObj.Close();
+            }
+             catch (e) {
+                alert("错误：" + webPDFObj.GetErrMsg());
+         }
+}
+function TestSealKeyWord() {
+    try {
+        // 关键字签章
+        // 参数1：关键字
+        // 参数2：可选参数，时间戳使用方式，0表示在配置时间戳试使用时间戳，1表示不使用时间戳
+        webPDFObj.SealKeyWord(kw.value, 1);
+    }
+    catch (e) {
+        alert("错误：" + webPDFObj.GetErrMsg());
+    }
+}
+function TestClickInsertSealButton() {
+try {
+                webPDFObj.ClickInsertSealButton();
+            }
+            catch (e) {
+                alert("错误：" + webPDFObj.GetErrMsg());
+            }
+        }
+
+function TestSignTextKey() {
+    try {
+        // 旋转页码
+        // 参数1：关键字
+        //  参数2：签批内容
+        // 参数3：X方向偏移
+        // 参数4：Y方向偏移
+        // 参数5：字体类型，宋体（0）、黑体（1）、仿宋（2）
+        // 参数6：字体大小
+        webPDFObj.SignTextByKeyword("（受理通知）", signTextContext.value, 0, 0, 0, 12);
+    }
+    catch (e) {
+        alert(e.message+"***"+webPDFObj.GetErrMsg());
+    }
+}
+
+
+
+</script>
+<style type="text/css">
+<!--
+.STYLE1 {
+	font-family: "宋体";
+	font-size: x-large;
+	font-weight: bold;
+}
+-->
+</style>
+</head>
+
+<body>
+<div align="center"><span class="STYLE1">河北腾翔->技术支持部->电子签章WEB调用实例</span></div>
+<table border="0" width="100%" height="90%">
+<tr width="100%" height="100%">
+<td width="460">
+      <table widtd="100%" border="1">
+      	<tr>
+      		<td colspan="2" align="center">
+      			<input name="Submit5" type="button" onclick="TestCloseFile();" value="关闭已打开文档" />
+      		</td>
+      	</tr>
+        <tr>
+          <td  >
+            <input name="Submit" type="button" onclick="TestOpen();" value="打开本地文件" />
+          </td>
+          <td>
+          	PDF路径：<input widtd="100px" name="localSrc" type="text" value="E:\testPDF\9A.pdf" size="20" />
+          </td>
+        </tr>
+       <tr>
+       	<td>
+       	<input name="Submit" type="button" onclick="TestLoadFile();" value="打开其他格式文件" />
+       	</td>
+       	<td>
+       		文件路径：<input widtd="100px" name="localSrc1" type="text" value="E:\testPDF\9A.pdf" size="20" />
+       	</td>
+       </tr>
+        <tr>
+          <td >
+          	<input name="Submit2" type="button" onclick="TestOpenNet();" value="打开网络文件" />
+            </td>
+          <td>网络URL：<input name="netSrc" type="text" size="20" value="http://192.168.33.200/res/%E6%8A%95%E6%A0%87%E4%BF%9D%E5%87%BD%E7%94%B3%E8%AF%B7%E4%B9%A6.pdf" /></td>
+        </tr>
+        <tr>
+          <td ><input name="Submit3" type="button" onclick="TestSave();" value="保存本地文件" /></td>
+          <td><input name="localDst" type="text" size="20" /></td>
+        </tr>
+        <tr>
+          <td ><input name="Submit4" type="button" onclick="TestSaveNet();" value="保存网络文件" /></td>
+          <td><input name="netDst" type="text" size="20" value="http://192.168.33.200:8080/demo/upload?name=aaa" /></td>
+        </tr>
+        <tr>
+          <td ><input name="Submit8" type="button" onclick="TestInsertSeal();" value="插入签章1" />&nbsp;&nbsp;<input name="Submit9" type="button" onclick="TestInsertSeal1();" value="插入签章2" /></td>
+          <td >在第<input name="pageNO" type="text" size="4" />页</td>
+        </tr>
+        <tr>
+          <td><input name="Submit26" type="button" onclick="TestSealKeyWord();" value="关键字盖章" /></td>
+          <td >关键字：<input name="kw" type="text" size="20" /></td>
+        </tr>
+        <tr>
+          <td><input name="Submit11" type="button" onclick="TestGetSealPack(src1.value,true);" value="指定文件获取签章数量" /></td>
+          <td >文件路径：<input name="src1" id="src1" type="text" size="20" /></td>
+        </tr>
+        <tr>
+          <td><input name="Submit12" type="button" onclick="TestVerifyAllSealPack();" value="指定文件批量验证签章" /></td>
+          <td >文件路径：<input name="textfield" type="text" size="20" /></td>
+        </tr>
+        <tr>
+          <td>
+              <input name="Submit13" type="button" onclick="TestInsertSealPack();" value="插入签章1" /><br/>
+              <input name="Submit14" type="button" onclick="SelectStampAndLogin_Seal();" value="插入签章2" /><br/>
+              <input name="Submit15" type="button" onclick="TestInsertPageSealPack();" value="插入签章3" />
+            </td>
+          <td >文件路径：<input name="textfield2" type="text" size="15" />第<input name="pageNO1" type="text" size="2" />页</td>
+        </tr>
+        <tr>
+          <td><input name="Submit25" type="button" onclick="SelectStampAndLogin_Seal();" value="插入二维码" /></td>
+          <td >文件路径：<input name="src" type="text" size="15" />第<input name="pageNO2" type="text" size="2" />页</td>
+        </tr>
+      </table>
+      </td>
+      <td rowspan="3">
+      <object id="webPDFObj" classid="CLSID:6EE0E832-A96C-480C-AE0A-EB35A9BB9651" width="100%"
+        height="100%">
+        <!-- 设置保存在本地的PDF文件名称，插入签章时在签章信息中会保存此文件名 -->
+        <param name="LocalFileName" value="合同出租.pdf">
+	</object>
+      </td>
+</tr>
+<tr>
+  <td ><table width="450" border="1">
+    <tr>
+      <td ><input name="Submit6" type="button" onclick="TestGetPageCount();" value="获取文档页数" />
+		&nbsp;&nbsp;
+            <input name="Submit7" type="button" onclick="TestGetSeal();" value="获取签章数量" />
+            &nbsp;&nbsp;
+            <input name="Submit18" type="button" onclick="TestDisableSealFunc();" value="隐藏工具栏签章功能" />
+	</td>
+    </tr>
+    <tr>
+      <td>
+        <input name="Submit182" type="button" onclick="TestDisableSealFunc1();" value="显示工具栏签章功能" />
+      &nbsp;&nbsp;
+      第<input name="sealIndex" type="text" size="3" />个章&nbsp;<input name="Submit20" type="button" onclick="TestGetSealPic();" value="获取签章图片" />
+      </td>
+    </tr>
+    <tr>
+      <td >宽<input name="Widtd" type="text" size="3" />高<input name="Height" type="text" size="3" /><input name="Submit23" type="button" onclick="TestResizeWin();" value="   更改控件大小   " />
+      <input name="Submit27" type="button" onclick="TestClickInsertSealButton();" value="调用工具栏盖章按钮" />
+      </td>
+    </tr>
+    <tr>
+      <td ><input name="Submit10" type="button" onclick="TestVerifyAllSeal();" value="批量验证签章" />
+       <input name="Submit21" type="button" onclick="GetVer();" value="获取控件版本" />
+       <input name="Submit16" type="button" onclick="TestSealLock();" value="签章锁定" />
+       <input name="Submit17" type="button" onclick="TestSealLock1();" value="签章解锁" />
+       </td>
+    </tr>
+    <tr>
+      <td >
+        
+        <input name="Submit19" type="button" onclick="TestShowToolbar();" value="隐藏工具栏" />
+        <input name="Submit192" type="button" onclick="TestShowToolbar1();" value="显示工具栏" />
+        <input name="Submit22" type="button" onclick="OpenReader();" value="打开阅读器" />
+        <input name="Submit24" type="button" onclick="TestPrint();" value="打印" />
+      </td>
+    </tr>
+    <tr>
+      <td >
+       	签批内容：<textarea rows="3" cols="20"  id="signTextContext"> </textarea>
+        <input type ="button" onclick="TestSignTextKey()" value="静默签章"
+      </td>
+    </tr>
+  </table></td>
+  </tr>
+  <tr>
+  <td><div id="divPic" style="widtd:60px;height:60px;"></td>
+  </tr>
+</table>
+  
+
+</body>
+</html>

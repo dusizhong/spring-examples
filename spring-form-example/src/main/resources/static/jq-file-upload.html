@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>jq上传文件示例</title>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript">
+
+		function doUpload() {
+
+			var file1 = document.getElementById('file').files[0];
+			var file2 = $('#file')[0].files[0];
+
+			var formData = new FormData();
+			formData.append("file", file2);
+			formData.append("memo", "文件备注");
+
+			$.ajax({
+				url: 'http://localhost:9004/file/upload',
+				type: 'POST',
+				data: new FormData($("#uploadForm")[0]),
+				processData: false,	
+				cache:false,
+				contentType: false,
+				success: function(result) {
+					alert('上传成功 ' + result);
+				},
+				error: function(error) {
+					alert('Error');
+				}
+			});
+		}
+		</script>
+	</head>
+
+	<body>
+		<form id="uploadForm" enctype="multipart/form-data">
+			<div id="login" align="center">
+				上传文件测试：<br/>
+				文件：<input type="file" name="file" id="file" /><br/>
+				备注：<input type="text" name="memo" id="memo"><br/>
+				<input type="button" value="上传" onclick="doUpload()">
+			</div>
+		</form>
+	</body>
+</html>

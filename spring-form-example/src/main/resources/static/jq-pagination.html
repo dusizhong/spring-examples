@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jq分页示例（暂不能用）</title>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.pagination.js"></script>
+</head>
+<style>
+    #tableDate tr td span{ padding: 5px 15px; margin:0 5px; border: 1px solid #91D5FF;}
+    #tableDate tr td label{ padding: 5px 15px; margin:0 5px; border: 1px solid #91D5FF;}
+</style>
+<body>
+
+</body>
+</html>
+
+<script>
+    window.onload = function() {
+
+        var operation = {
+            del: '删除',
+            look: '查看',
+            eidt: '编辑'
+        };
+
+        var page = 0;
+        var size = 10;
+        
+        $.ajax({
+            url: 'http://localhost:9004/area/page',
+            type: 'POST',
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({ "pageNumber": page, "pageSize": size }),
+            success: function(result) {
+                console.log(result);
+                var totalPages = result.totalPages;
+                $("#pagination").pagination(totalPages, {
+                    callback : pageselectCallback,
+                    items_per_page : 0,
+                    num_display_entries : 5,
+                    current_page : 0,
+                    num_edge_entries : 0
+                });
+                //这个事件是在翻页时候用的 
+                function pageselectCallback(page_id, jq) {
+                    console.log(page_id);
+                    console.log(jq);
+                    $.ajax({
+                        url: 'http://localhost:9004/area/page',
+                        type: 'POST',
+                        contentType: 'application/json;charset=UTF-8',
+                        data: JSON.stringify({ "pageNumber": page_id, "pageSize": size }),
+                        success: function(result) {
+                            console.log(result);
+                            var rows = result.content;
+                            var totalElements = result.totalElements;
+                            console.log(totalElements);
+                            $('.totalDate').text(totalElements);
+                            var msg = '<tr><th>ID</th><th>省</th><th>市</th><th>区县</th><th>操作</th></tr>';
+                            for (var i = 0; i < rows.length; i++) {
+                                // for(var i = 0; i<5;i++){
+                                msg += '<tr id="rwo' + i + '"></td>';
+                                msg += '<td>' + rows[i].id + '</td>';
+                                msg += '<td>' + rows[i].province + '</td>';
+                                msg += '<td>' + rows[i].city + '</td>';
+                                msg += '<td>' + rows[i].area + '</td>';
+                                msg += '<td width="220"><span id="del' + rows[i].id + '">' + operation.del + '</span><label id="' + rows[i].id +
+                                    '">' + operation.look + '</label><strong id="eid' + rows[i].id + '">' + operation.eidt +
+                                    '</strong></td></tr>';
+                            }
+                            $("#tableDate").html(msg);
+                            $('#tableDate tr td span').click(function(i) {
+                                var delId = this.id;
+                                var delIds = delId.substring(3, delId.length);
+                                $('.sure_box').show();
+                                $('#sure').click(function() {
+                                    //调用删除接口
+                                    alert('删除成功');
+                                    window.location.reload();
+                                })
+                            });
+                            $('#tableDate tr td label').click(function(i){
+                                var lookid = this.id;
+                                console.log(lookid);
+                                sessionStorage.setItem('lookid',lookid);
+                                location.href = 'detail.html';
+                            });
+                    
+                            $('#tableDate tr td strong').click(function(i) {
+                                var eidId = this.id;
+                                var eidIds = eidId.substring(3, eidId.length);
+                                console.log(eidIds);
+                                location.href = "StepOne.html?eidtguaranteeId=" + eidIds;
+                            });
+                        },
+                        error: function() {
+                            alert('error');
+                        }
+                    })
+                }
+            },
+        })
+    }
+</script>

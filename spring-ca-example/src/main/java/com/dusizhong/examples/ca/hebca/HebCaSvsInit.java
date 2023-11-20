@@ -11,7 +11,7 @@ public class HebCaSvsInit implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments applicationArguments) {
         try {
-            HebcaVerify.init("/home/HebcaSvs.properties");
+            HebcaVerify.init("/temp/HebcaSvs.properties");
             System.out.println("HebcaSvs init success");
         } catch (Exception e) {
             System.out.println("HebcaSvs init failed: " + e.getMessage());

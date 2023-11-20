@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html lang="zh-cn">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>jq oauth2 login demo</title>
+    <script src="js/jquery.min.js" type="text/JavaScript"></script>
+    <script type="text/JavaScript" language="JavaScript">
+
+      var baseURI = 'http://localhost:9004';
+      var accessToken = '';
+
+      function getToken() {
+          var basic_auth = 'clientapp:123456';
+          basic_auth = window.btoa(basic_auth);
+          var requestParams = {
+              'grant_type': 'password',
+              'username': 'ceshi',
+              'password': 'e10adc3949ba59abbe56e057f20f883e'
+          }
+          $.ajax({
+              'url': baseURI + '/oauth/token',
+              'type': 'POST',
+              'content-Type': 'x-www-form-urlencoded',
+              'dataType': 'json',
+              'headers': {
+                'Authorization': 'Basic ' + basic_auth
+              },
+              'data': requestParams,
+              'success': function (result) {
+                accessToken = result.access_token;
+                alert('Success!\r\nAccess Token:\r' + accessToken);
+                document.getElementById('pageDiv').innerHTML = result.access_token;
+                return result;
+              },
+              'error': function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('Error: ' + errorThrown);
+                console.log(XMLHttpRequest.status + ' ' + XMLHttpRequest.statusText);
+                return false;
+              }
+          });
+        }
+
+      // Test use token
+      function testUseToken() {
+          $.ajax({
+              // 'url': baseURI + '/cpt/product',
+              'url': baseURI + '/cpt/news?type=ALL',
+              'type': 'GET',
+              'content-Type': 'x-www-form-urlencoded',
+              'dataType': 'json',
+              'headers': {
+                'Authorization': 'bearer ' + accessToken
+              },
+              'success': function (result) {
+                var returnResult = JSON.stringify(result);
+                alert('Success!\r\n' + returnResult);
+                document.getElementById('callResults').innerHTML = returnResult;
+                return result;
+              },
+              'error': function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('Error: ' + errorThrown);
+                console.log(XMLHttpRequest.status + ' ' + XMLHttpRequest.statusText);
+                return false;
+              }
+          });
+      }
+
+      // Test no token
+      function testNoToken() {
+          $.ajax({
+              'url': baseURI + '/',
+              'type': 'GET',
+              'content-Type': 'x-www-form-urlencoded',
+              'dataType': 'json',
+              'success': function (result) {
+                var returnResult = JSON.stringify(result);
+                alert('Success!\r\n' + returnResult);
+                document.getElementById('callResults1').innerHTML = returnResult;
+                return result;
+              },
+              'error': function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('Error: ' + errorThrown);
+                console.log(XMLHttpRequest.status + ' ' + XMLHttpRequest.statusText);
+                return false;
+              }
+          });
+      }
+    </script>
+
+    <style>
+          .outer {
+              width: 960px;
+              min-height: 45px;
+              height: auto;
+              color: black;
+              background-color: lightgray;
+              border: 1px solid black;
+              padding: 5px;
+              word-wrap: break-word;
+          }
+    </style>
+
+</head>
+<body>
+    <!-- get Token -->
+    <button onclick="getToken()">Get Token</button>
+    <br>
+    <div class="outer" id="pageDiv"></div>
+    <br>
+    <!-- test use token -->
+    <button onclick="testUseToken()">Run</button>
+    <br>Results:
+    <br>
+    <div class="outer" id="callResults"></div>
+    <br>
+    <!-- test no token -->
+    <button onclick="testNoToken()">Run</button>
+    <br>Results:
+    <br>
+    <div class="outer" id="callResults1"></div>
+
+</body></html>

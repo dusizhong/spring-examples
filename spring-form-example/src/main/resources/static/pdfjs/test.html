@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>pdf文件预览</title>
+        <script src="../js/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                var url = 'http://localhost:9004/pdfjs/web/compressed.tracemonkey-pldi-09.pdf';
+                $("#pdfContainer").attr("src", "web/viewer.html?file="+url+"#page=1");
+            });
+        </script>
+    </head>
+    <body>
+        <div id="showPdf">
+            <iframe id="pdfContainer" src="" width="100%" height="1000" frameborder="0"></iframe>
+        </div>
+    </body>
+</html>

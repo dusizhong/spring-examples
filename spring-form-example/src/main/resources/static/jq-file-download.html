@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="zh-cn">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Jquery client demo</title>
+    <script src="jq/jquery.min.js" type="text/JavaScript"></script>
+    <script type="text/JavaScript" language="JavaScript">
+
+      var url = 'http://localhost:9004/pdfjs/web/compressed.tracemonkey-pldi-09.pdf';
+      var url2 = 'http://test.ebaoch.com/EcreditServer/credit/down_load';
+      var accessToken = '5795b2db-bece-4120-9c91-a6b3adf42dcd';
+
+      // Test use token
+      function testUseToken() {
+          $.ajax({
+              'url': baseURI + '/uaa/user',
+              'type': 'GET',
+              'content-Type': 'x-www-form-urlencoded',
+              'dataType': 'json',
+              'headers': {
+                'Authorization': 'bearer ' + accessToken
+              },
+              'success': function (result) {
+                var returnResult = JSON.stringify(result);
+                alert('Success!\r\n' + returnResult);
+                document.getElementById('callResults').innerHTML = returnResult;
+                return result;
+              },
+              'error': function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('Error: ' + errorThrown);
+                console.log(XMLHttpRequest.status + ' ' + XMLHttpRequest.statusText);
+                return false;
+              }
+          });
+      }
+
+      function download() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', url, true);//get请求，请求地址，是否异步
+		xhr.responseType = "blob";    // 返回类型blob
+		xhr.onload = function () {// 请求完成处理函数
+			if (this.status === 200) {
+				var blob = this.response;// 获取返回值
+				var a = document.createElement('a');
+				a.download = 'data.doc';
+				a.href=window.URL.createObjectURL(blob);
+				a.click();
+		    }
+		};
+		// 发送ajax请求
+		xhr.send();
+	 };
+
+    </script>
+
+    <style>
+          .outer {
+              width: 960px;
+              min-height: 45px;
+              height: auto;
+              color: black;
+              background-color: lightgray;
+              border: 1px solid black;
+              padding: 5px;
+              word-wrap: break-word;
+          }
+    </style>
+
+</head>
+<body>
+    <!-- get Token -->
+    <button onclick="download()">测试</button>
+    
+
+</body></html>

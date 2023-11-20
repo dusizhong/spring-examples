@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+	<head>
+		<meta charset="utf-8" />
+		<title>JS浮点计算示例</title>
+		<script type="text/javascript" src="jquery.min.js"></script>
+        <script type="text/javascript" src="js-cal.js"></script>
+        <script type="text/javascript" src="number-precision.js"></script>
+		<script type="text/javascript">
+            function doCal(a, b) {
+                console.log(floatObj.add(a, b));
+                console.log(floatObj.subtract(a, b));
+                console.log(floatObj.multiply(a, b))
+                console.log(floatObj.divide(a, b));
+            }
+            function doPrecision() {
+                NP.strip(0.09999999999999998); // = 0.1
+NP.plus(0.1, 0.2);             // = 0.3, not 0.30000000000000004
+NP.plus(2.3, 2.4);             // = 4.7, not 4.699999999999999
+NP.minus(1.0, 0.9);            // = 0.1, not 0.09999999999999998
+NP.times(3, 0.3);              // = 0.9, not 0.8999999999999999
+NP.times(0.362, 100);          // = 36.2, not 36.199999999999996
+NP.divide(1.21, 1.1);          // = 1.1, not 1.0999999999999999
+NP.round(0.105, 2);            // = 0.11, not 0.1
+            }
+		</script>
+	</head>
+
+	<body>
+		<form id="myForm">
+			<div id="cal" align="center">
+				JS浮点计算示例<br/>
+				<input type="text" width="40px" length="400px" id="a1"><br/>
+				<input type="text" width="40px" length="400px" id="b1"><br/>
+				<input type="button" value="计算" onclick="doCal()">
+                <input type="button" value="计算" onclick="doPrecision()">
+			</div>
+            <div id="result" align="center">
+                <h4 id="result">结果</h4>
+            </div>
+		</form>
+	</body>
+</html>
