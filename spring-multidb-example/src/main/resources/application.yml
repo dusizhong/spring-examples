@@ -1,0 +1,43 @@
+server:
+  port: 9012
+
+spring:
+  application:
+    name: multidb-server
+  datasource:
+    user:
+      url: jdbc:mysql://localhost:3306/ebid_uaa_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=true
+      username: root
+      password:
+    tender:
+      url: jdbc:mysql://localhost:3306/ezjc_tender_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=true
+      username: root
+      password:
+    hikari:
+      user:
+        pool-name: jpa-hikari-pool-user
+        maximum-pool-size: 12
+        connection-timeout: 60000
+        minimum-idle: 10
+        idle-timeout: 500000
+        max-lifetime: 540000
+        connection-test-query: SELECT 1
+      tender:
+        pool-name: jpa-hikari-pool-tender
+        maximum-pool-size: 12
+        connection-timeout: 60000
+        minimum-idle: 10
+        idle-timeout: 500000
+        max-lifetime: 540000
+        connection-test-query: SELECT 1
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        physical_naming_strategy: com.dusizhong.examples.multidb.config.CustomNamingStrategy
+    show-sql: true
+
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss.SSS
+

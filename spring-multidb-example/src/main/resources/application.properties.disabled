@@ -1,0 +1,14 @@
+server.port = 9012
+spring.datasource.user.url=jdbc:mysql://localhost:3306/ebid_uaa_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=true
+spring.datasource.user.username=root
+spring.datasource.user.password=
+spring.datasource.user.driverClassName=com.mysql.cj.jdbc.Driver
+
+spring.datasource.tender.url=jdbc:mysql://localhost:3306/ezjc_tender_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=true
+spring.datasource.tender.username=root
+spring.datasource.tender.password=
+spring.datasource.tender.driverClassName=com.mysql.cj.jdbc.Driver
+
+spring.jpa.show-sql=true
+spring.jpa.database=mysql
+spring.jpa.properties.hibernate.physical_naming_strategy=com.dusizhong.examples.multidb.config.CustomNamingStrategy

@@ -32,6 +32,8 @@ spring示例代码，源于真实项目。
    * 微信支付、支付宝支付、通联支付（基于收银宝/云商通实现微信、支付宝、企业网银、个人网银、H5支付）、河北银行聚合支付（微信、支付宝、银联扫码）示例。
 9011. spring-office-example
    * java使用poi、easyexcel处理excel、word示例
+9012. spring-multidb-example
+   * spring jpa连接多数据源示例。
 
 
 9080. spring cloud2 example
