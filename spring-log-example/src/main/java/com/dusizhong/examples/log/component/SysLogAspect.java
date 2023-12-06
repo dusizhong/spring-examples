@@ -70,11 +70,11 @@ public class SysLogAspect {
             Browser browser = userAgent.getBrowser();
             String ip = IpUtils.getIpAddr(request);
             String url = request.getRequestURI();
-            String bizStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-HH-ss HH:mm:ss.SSS"));
+            String bizStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
             //目标执行后
             Object result = joinPoint.proceed();
             JSONObject jsonResult = (JSONObject) JSONObject.toJSON(result);
-            String bizEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-HH-ss HH:mm:ss.SSS"));
+            String bizEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
             if ("200".equals(jsonResult.getString("code"))) {
                 SysLog sysLog = new SysLog();
                 sysLog.setOpUrl(url);
@@ -90,7 +90,7 @@ public class SysLogAspect {
                 sysLog.setOpUserOs(os.getName());
                 sysLog.setOpUserBrowser(browser.getName());
                 sysLog.setOpPlatform("LOG_SERVER");
-                sysLog.setOpTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-HH-ss HH:mm:ss.SSS")));
+                sysLog.setOpTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
                 CompletableFuture.runAsync(() -> sysLogRepository.save(sysLog)).exceptionally(e -> {
                     log.error("异步保存日志失败: " + e.getMessage());
                     return null;

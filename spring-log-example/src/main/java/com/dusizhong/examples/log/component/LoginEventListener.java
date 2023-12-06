@@ -54,8 +54,8 @@ public class LoginEventListener implements ApplicationListener<AuthenticationSuc
             sysLog.setOpBiz("Oauth");
             sysLog.setOpBizId(currentUser.getString("id"));
             sysLog.setOpBizData(null);
-            sysLog.setOpStartTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-HH-ss HH:mm:ss.SSS")));
-            sysLog.setOpEndTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-HH-ss HH:mm:ss.SSS")));
+            sysLog.setOpStartTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
+            sysLog.setOpEndTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
             sysLog.setOpBizResult(currentUser.toJSONString());
             sysLog.setOpUserId(currentUser.getString("id"));
             sysLog.setOpUserName(currentUser.getString("name"));
@@ -63,7 +63,7 @@ public class LoginEventListener implements ApplicationListener<AuthenticationSuc
             sysLog.setOpUserOs(os.getName());
             sysLog.setOpUserBrowser(browser.getName());
             sysLog.setOpPlatform("LOG_SERVER");
-            sysLog.setOpTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-HH-ss HH:mm:ss.SSS")));
+            sysLog.setOpTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
             CompletableFuture.runAsync(() -> sysLogRepository.save(sysLog)).exceptionally(e -> {
                 log.error("异步保存日志失败: " + e.getMessage());
                 return null;
