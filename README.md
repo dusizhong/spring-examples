@@ -34,6 +34,9 @@ spring示例代码，源于真实项目。
    * java使用poi、easyexcel处理excel、word示例
 9012. spring-multidb-example
    * spring jpa连接多数据源示例。
+9013. spring-log-example
+* spring日志示例，实现logback、aop、filter、interrupter等方式打印登录日志及操作日志，可记录操作人id、用户名、操作业务模块、业务id
+  、操作人IP、浏览器、操作系统等信息。
 
 
 9080. spring cloud2 example

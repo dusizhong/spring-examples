@@ -24,6 +24,7 @@
         <module>spring-pay-example</module>
         <module>spring-office-example</module>
         <module>spring-multidb-example</module>
+        <module>spring-log-example</module>
     </modules>
 
 </project>
